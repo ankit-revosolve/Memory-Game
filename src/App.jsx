@@ -7,6 +7,9 @@ export default function App() {
     const [emojisData, setEmojisData] = useState([])
     const [selectedCards, setSelectedCards] = useState([])
     const [matchedCards, setMatchedCards] = useState([])
+    const [isGameOver, setIsGameOver] = useState(false)
+
+    // console.log(matchedCards)
 
     useEffect(() => {
         if (selectedCards.length == 2 && selectedCards[0].name == selectedCards[1].name) {
@@ -14,6 +17,10 @@ export default function App() {
         }
     }, [selectedCards])
 
+    //Checking if the game is over by checking the length of matchedCards and emojisData
+    useEffect(()=>{
+        (emojisData.length !== 0 && matchedCards.length == emojisData.length) ? setIsGameOver(prev => !prev) : null
+    },[matchedCards])
 
     function shuffledData(data) {
         const pairedData = [...data, ...data];
@@ -76,7 +83,7 @@ export default function App() {
         <main>
             <h1>Memory</h1>
             {!isGameOn && <Form handleSubmit={startGame} />}
-            {isGameOn && <MemoryCard handleClick={turnCard} data={emojisData} />}
+            {isGameOn && <MemoryCard selectedCards={selectedCards} matchedCards={matchedCards} handleClick={turnCard} data={emojisData} />}
         </main>
     )
 }
